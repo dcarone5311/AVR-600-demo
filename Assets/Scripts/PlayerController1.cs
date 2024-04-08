@@ -11,12 +11,15 @@ public class PlayerController1 : MonoBehaviour
     private Rigidbody playerRB;
 
     private bool isGrounded;
+    private AudioSource audio;
+    public AudioClip ping;
 
     // Start is called before the first frame update
     void Start()
     {
         playerTransform = transform;
         playerRB = GetComponent<Rigidbody>();
+        audio = GetComponent<AudioSource>();
     }
 
     private void OnCollisionStay(Collision c)
@@ -33,6 +36,18 @@ public class PlayerController1 : MonoBehaviour
     private void OnCollisionExit(Collision collision)
     {
         isGrounded = false;
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if(other.tag == "Collectable")
+        {
+            Debug.Log("Touch");
+            GetComponent<TimeScore>().coins += 1;
+            audio.clip = ping;
+            audio.Play(0);
+            GameObject.Destroy(other.gameObject);
+        }
     }
 
     // Update is called once per frame
